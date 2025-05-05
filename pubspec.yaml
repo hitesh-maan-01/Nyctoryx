@@ -1,0 +1,36 @@
+name: nyctoryx
+description: A privacy scanner app that analyzes installed apps and provides detailed insights.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI and layout
+  cupertino_icons: ^1.0.6
+  provider: ^6.1.1
+  google_fonts: ^6.1.0
+
+  # Charts and animations
+  fl_chart: ^0.63.0
+  animations: ^2.0.11
+
+  # App state and utilities
+  shared_preferences: ^2.2.2
+
+  #permission
+  permission_handler: ^11.0.1
+  #video player
+  video_player: ^2.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+
