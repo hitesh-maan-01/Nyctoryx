@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:device_apps/device_apps.dart'
+    show Application, ApplicationWithIcon, DeviceApps;
+
 import 'overall_score.dart';
-import 'app_list.dart';
 
 // Import section pages
 import 'profile_page.dart';
@@ -19,30 +21,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Map<String, dynamic>> apps = [
-    {"name": "App One", "score": 95, "logo": Icons.security},
-    {"name": "App Two", "score": 55, "logo": Icons.warning},
-    {"name": "App Three", "score": 80, "logo": Icons.verified_user},
-    {'name': 'App 1', 'score': 70, 'logo': Icons.apps},
-    {'name': 'App 2', 'score': 85, 'logo': Icons.phone_android},
-    {'name': 'App 3', 'score': 70, 'logo': Icons.camera_alt},
-    {'name': 'App 4', 'score': 40, 'logo': Icons.music_note},
-    {'name': 'App 5', 'score': 60, 'logo': Icons.gamepad},
-    {'name': 'App 6', 'score': 90, 'logo': Icons.map},
-    {'name': 'App 7', 'score': 70, 'logo': Icons.message},
-    {'name': 'App 8', 'score': 10, 'logo': Icons.photo_camera},
-    {'name': 'App 9', 'score': 70, 'logo': Icons.access_alarm},
-    {'name': 'App 10', 'score': 50, 'logo': Icons.assistant},
-  ];
-
+  List<Application> installedApps = [];
   String searchQuery = "";
 
   @override
+  void initState() {
+    super.initState();
+    loadInstalledApps();
+    requestPermissionsOnce();
+  }
+
+  Future<void> loadInstalledApps() async {
+    List<Application> apps = await DeviceApps.getInstalledApplications(
+      includeAppIcons: true,
+      includeSystemApps: false,
+      onlyAppsWithLaunchIntent: true,
+    );
+    setState(() {
+      installedApps = apps;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final filteredApps = apps
-        .where((app) =>
-            app['name'].toLowerCase().contains(searchQuery.toLowerCase()))
-        .toList();
+    final filteredApps = installedApps.where((app) {
+      return app.appName.toLowerCase().contains(searchQuery.toLowerCase());
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text('Profile'),
               onTap: () {
-                Navigator.pop(context); // Close drawer
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -99,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PrivacyRequirementPage()),
+                      builder: (context) => const PrivacyRequirementPage()),
                 );
               },
             ),
@@ -109,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
               },
             ),
@@ -119,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AboutPage()),
+                  MaterialPageRoute(builder: (context) => const AboutPage()),
                 );
               },
             ),
@@ -129,14 +133,14 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HelpPage()),
+                  MaterialPageRoute(builder: (context) => const HelpPage()),
                 );
               },
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -155,17 +159,28 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const SizedBox(height: 20),
-            AppList(apps: filteredApps),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredApps.length,
+                itemBuilder: (context, index) {
+                  final app = filteredApps[index];
+                  return ListTile(
+                    leading: app is ApplicationWithIcon
+                        ? Image.memory(app.icon, width: 40, height: 40)
+                        : const Icon(Icons.apps),
+                    title: Text(app.appName),
+                    subtitle: Text(app.packageName),
+                    onTap: () {
+                      // Optionally handle tap
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    requestPermissionsOnce();
   }
 
   Future<void> requestPermissionsOnce() async {
@@ -193,9 +208,5 @@ class _HomePageState extends State<HomePage> {
     if (!microphoneStatus.isGranted) {
       await Permission.microphone.request();
     }
-
-    // You can check and request other permissions similarly:
-    // await Permission.location.request();
-    // await Permission.microphone.request();
   }
 }

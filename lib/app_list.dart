@@ -63,22 +63,22 @@ class AppDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('App Privacy Details')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             AppHeader(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             PrivacyAlertsSection(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             PermissionsSection(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             BackgroundActivitySection(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             PrivacyScoreSection(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             AppStatusSection(),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             RecommendationsSection(),
           ],
         ),

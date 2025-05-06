@@ -96,18 +96,19 @@ class _SettingsPageState extends State<SettingsPage> {
           _buildSettingTile(
             'Check for Updates',
             Icons.system_update,
-            UpdateScreen(),
+            const UpdateScreen(),
           ),
           _buildSettingTile(
             'Security Features',
             Icons.security,
-            SecurityScreen(),
+            const SecurityScreen(),
           ),
-          _buildSettingTile('Run Security Scan', Icons.shield, ScanScreen()),
+          _buildSettingTile(
+              'Run Security Scan', Icons.shield, const ScanScreen()),
           _buildSettingTile(
             'User Agreement',
             Icons.description,
-            AgreementScreen(),
+            const AgreementScreen(),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
