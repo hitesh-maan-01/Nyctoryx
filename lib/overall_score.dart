@@ -23,9 +23,11 @@ class _OverallScoreState extends State<OverallScore> {
     int secureCount = widget.secureApps.length;
     int riskyCount = widget.riskyApps.length;
     int total = secureCount + riskyCount;
+    double securePercent = total > 0 ? (secureCount / total) * 90 : 0;
+    double riskyPercent = total > 0 ? (riskyCount / total) * 90 : 0;
 
-    double securePercent = total > 0 ? (secureCount / total) * 100 : 0;
-    double riskyPercent = total > 0 ? (riskyCount / total) * 100 : 0;
+    // Compute mock overall score
+    double overallScore = securePercent;
 
     return Card(
       margin: const EdgeInsets.all(16),
@@ -35,42 +37,58 @@ class _OverallScoreState extends State<OverallScore> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
-              'Overall Privacy Score',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.info_outline, color: Colors.grey),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AppListScreen(
+                          title: 'Privacy Report',
+                          apps: widget.secureApps + widget.riskyApps,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Overall Privacy Score',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             AspectRatio(
               aspectRatio: 1.3,
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 4,
-                  centerSpaceRadius: 40,
-                  sections: [
-                    PieChartSectionData(
-                      color: Colors.green,
-                      value: securePercent,
-                      title: '${securePercent.toStringAsFixed(1)}%',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  PieChart(
+                    PieChartData(
+                      sectionsSpace: 4,
+                      centerSpaceRadius: 50,
+                      sections: _buildPieSections(overallScore),
                     ),
-                    PieChartSectionData(
-                      color: Colors.red,
-                      value: riskyPercent,
-                      title: '${riskyPercent.toStringAsFixed(1)}%',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                          fontSize: 14,
+                    swapAnimationDuration: const Duration(milliseconds: 800),
+                    swapAnimationCurve: Curves.easeInOutCubic,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${overallScore.toStringAsFixed(1)}%',
+                        style: const TextStyle(
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                swapAnimationDuration: const Duration(milliseconds: 800),
-                swapAnimationCurve: Curves.easeInOutCubic,
+                        ),
+                      ),
+                      const Text('Secure'),
+                    ],
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
@@ -120,16 +138,46 @@ class _OverallScoreState extends State<OverallScore> {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                // Add rescan logic here
+                // Add real rescan logic here
               },
               icon: const Icon(Icons.refresh),
               label: const Text("Rescan All Apps"),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 241, 241, 245)),
+                backgroundColor: const Color.fromARGB(255, 241, 241, 245),
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  List<PieChartSectionData> _buildPieSections(double score) {
+    final List<PieChartSectionData> sections = [];
+
+    if (score >= 80) {
+      sections.add(_createSection(score, Colors.green));
+      sections.add(_createSection(100 - score, Colors.grey[300]!));
+    } else if (score >= 60) {
+      sections.add(_createSection(score, Colors.amber));
+      sections.add(_createSection(100 - score, Colors.grey[300]!));
+    } else if (score >= 40) {
+      sections.add(_createSection(score, Colors.orange));
+      sections.add(_createSection(100 - score, Colors.grey[300]!));
+    } else {
+      sections.add(_createSection(score, Colors.red));
+      sections.add(_createSection(100 - score, Colors.grey[300]!));
+    }
+
+    return sections;
+  }
+
+  PieChartSectionData _createSection(double value, Color color) {
+    return PieChartSectionData(
+      color: color,
+      value: value,
+      title: '',
+      radius: 50,
     );
   }
 }
@@ -145,7 +193,11 @@ class AppListScreen extends StatelessWidget {
   });
 
   int _mockPrivacyScore(Application app) {
-    return app.packageName.length % 100;
+    final length = app.packageName.length;
+    if (length % 4 == 0) return 85;
+    if (length % 4 == 1) return 65;
+    if (length % 4 == 2) return 45;
+    return 25;
   }
 
   @override
@@ -153,7 +205,7 @@ class AppListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: Colors.indigo,
+        backgroundColor: const Color.fromARGB(255, 226, 227, 233),
       ),
       body: ListView.builder(
         itemCount: apps.length,

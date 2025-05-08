@@ -9,7 +9,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final Color textColor = const Color.fromARGB(255, 70, 130, 180);
-  final Color backgroundColor = const Color.fromARGB(255, 15, 18, 28);
+  final Color backgroundColor = const Color.fromARGB(255, 0, 0, 0);
 
   bool _camera = false;
   bool _location = false;
@@ -170,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage> {
 // Below are the placeholder screens for navigation
 
 class UpdateScreen extends StatelessWidget {
-  final Color bg = const Color.fromARGB(255, 15, 18, 28);
+  final Color bg = const Color.fromARGB(255, 0, 0, 0);
   final Color fg = const Color.fromARGB(255, 70, 130, 180);
 
   const UpdateScreen({super.key});
@@ -192,7 +192,7 @@ class UpdateScreen extends StatelessWidget {
 }
 
 class SecurityScreen extends StatelessWidget {
-  final Color bg = const Color.fromARGB(255, 15, 18, 28);
+  final Color bg = const Color.fromARGB(255, 0, 0, 0);
   final Color fg = const Color.fromARGB(255, 70, 130, 180);
 
   const SecurityScreen({super.key});
@@ -217,7 +217,7 @@ class SecurityScreen extends StatelessWidget {
 }
 
 class ScanScreen extends StatelessWidget {
-  final Color bg = const Color.fromARGB(255, 15, 18, 28);
+  final Color bg = const Color.fromARGB(255, 0, 0, 0);
   final Color fg = const Color.fromARGB(255, 70, 130, 180);
 
   const ScanScreen({super.key});
@@ -242,7 +242,7 @@ class ScanScreen extends StatelessWidget {
 }
 
 class AgreementScreen extends StatelessWidget {
-  final Color bg = const Color.fromARGB(255, 15, 18, 28);
+  final Color bg = const Color.fromARGB(255, 0, 0, 0);
   final Color fg = const Color.fromARGB(255, 70, 130, 180);
 
   const AgreementScreen({super.key});

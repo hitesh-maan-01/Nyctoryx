@@ -14,7 +14,9 @@ class HelpPage extends StatelessWidget {
           '• Visit our help center\n'
           '• Email us at: support@nyctoryx.com\n'
           '• Check FAQs within the Settings',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+          ),
         ),
       ),
     );

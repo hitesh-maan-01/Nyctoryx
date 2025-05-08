@@ -38,7 +38,10 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0F121C), Color(0xFF0F121C)],
+            colors: [
+              Color.fromARGB(255, 0, 0, 0),
+              Color.fromARGB(255, 0, 0, 0)
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -77,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
                       BoxShadow(
-                        color: Colors.black26,
+                        color: Color.fromARGB(66, 0, 0, 0),
                         blurRadius: 8,
                         offset: Offset(0, 4),
                       ),

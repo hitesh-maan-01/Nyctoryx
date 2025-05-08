@@ -51,7 +51,10 @@ class _SignupPageState extends State<SignupPage> {
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0F121C), Color(0xFF0F121C)],
+            colors: [
+              Color.fromARGB(255, 0, 0, 0),
+              Color.fromARGB(255, 0, 0, 0)
+            ],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
           ),
